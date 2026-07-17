@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Medicine {
+  id            Int        @id @default(autoincrement())
+  name          String
+  batchNumber   String
+  expiryDate    DateTime
+  price         Float
+  stockQuantity Int
+  billItems     BillItem[]
+}
+
+model Bill {
+  id          Int        @id @default(autoincrement())
+  totalAmount Float
+  date        DateTime   @default(now())
+  items       BillItem[]
+}
+
+model BillItem {
+  id         Int      @id @default(autoincrement())
+  billId     Int
+  medicineId Int
+  quantity   Int
+  price      Float
+  
+  bill       Bill     @relation(fields: [billId], references: [id])
+  medicine   Medicine @relation(fields: [medicineId], references: [id])
+}
+
+model Setting {
+  id    String @id @default(uuid())
+  key   String @unique
+  value String
+}
