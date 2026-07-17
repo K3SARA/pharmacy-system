@@ -96,10 +96,13 @@ export default function BillingPage() {
 
       if (res.ok) {
         const data = await res.json();
-        alert('Bill generated successfully!');
         setCart([]);
         setSearch('');
         setLastBillId(data.id);
+        
+        // Auto-open print tab
+        window.open(`/print/${data.id}`, '_blank');
+
         // Trigger a re-fetch of medicines to get updated stock
         const freshRes = await fetch('/api/inventory');
         setMedicines(await freshRes.json());
