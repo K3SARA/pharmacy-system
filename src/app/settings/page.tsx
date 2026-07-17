@@ -147,6 +147,34 @@ export default function SettingsPage() {
           </button>
         </form>
       </div>
+
+      <div className="card" style={{ marginTop: '2rem', border: '1px solid var(--danger)' }}>
+        <h2 style={{ marginBottom: '1rem', fontSize: '1.25rem', fontWeight: 600, color: 'var(--danger)' }}>Danger Zone</h2>
+        <p style={{ marginBottom: '1.5rem', color: 'var(--foreground)', opacity: 0.7 }}>
+          Deleting your billing history will permanently erase all sales records, receipts, and clear the dashboard metrics. This action cannot be undone.
+        </p>
+
+        <button 
+          className="btn btn-danger" 
+          onClick={async () => {
+            if (confirm('Are you ABSOLUTELY sure you want to delete ALL billing history? This cannot be undone.')) {
+              try {
+                const res = await fetch('/api/bills', { method: 'DELETE' });
+                if (res.ok) {
+                  alert('All billing history has been deleted.');
+                } else {
+                  alert('Failed to delete billing history.');
+                }
+              } catch (err) {
+                console.error('Error clearing data:', err);
+                alert('Error connecting to server.');
+              }
+            }
+          }}
+        >
+          Delete All Billing History
+        </button>
+      </div>
     </div>
   );
 }

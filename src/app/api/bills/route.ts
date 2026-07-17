@@ -96,3 +96,18 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Failed to create bill' }, { status: 500 });
   }
 }
+
+export async function DELETE() {
+  try {
+    // Delete all bill items first due to foreign key constraints, then delete bills
+    await prisma.$transaction([
+      prisma.billItem.deleteMany({}),
+      prisma.bill.deleteMany({})
+    ]);
+
+    return new NextResponse(null, { status: 204 });
+  } catch (error) {
+    console.error('Error deleting all bills:', error);
+    return NextResponse.json({ error: 'Failed to delete billing history' }, { status: 500 });
+  }
+}
