@@ -13,6 +13,7 @@ model Medicine {
   batchNumber   String
   expiryDate    DateTime
   price         Float
+  costPrice     Float      @default(0)
   stockQuantity Int
   billItems     BillItem[]
 }
@@ -30,6 +31,7 @@ model BillItem {
   medicineId Int
   quantity   Int
   price      Float
+  costPrice  Float    @default(0)
   
   bill       Bill     @relation(fields: [billId], references: [id])
   medicine   Medicine @relation(fields: [medicineId], references: [id])

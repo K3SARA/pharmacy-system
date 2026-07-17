@@ -31,16 +31,27 @@ export async function POST(request: Request) {
 
     // Use a transaction to ensure all operations succeed or fail together
     const newBill = await prisma.$transaction(async (tx) => {
+      // Fetch all medicines to get their current cost prices
+      const medicineIds = items.map((i: any) => parseInt(i.medicineId, 10));
+      const medicines = await tx.medicine.findMany({
+        where: { id: { in: medicineIds } }
+      });
+      const medMap = new Map(medicines.map(m => [m.id, m]));
+
       // 1. Create the bill
       const bill = await tx.bill.create({
         data: {
           totalAmount: parseFloat(totalAmount),
           items: {
-            create: items.map((item: any) => ({
-              medicineId: parseInt(item.medicineId, 10),
-              quantity: parseInt(item.quantity, 10),
-              price: parseFloat(item.price)
-            }))
+            create: items.map((item: any) => {
+              const medId = parseInt(item.medicineId, 10);
+              return {
+                medicineId: medId,
+                quantity: parseInt(item.quantity, 10),
+                price: parseFloat(item.price),
+                costPrice: medMap.get(medId)?.costPrice || 0
+              };
+            })
           }
         },
         include: {

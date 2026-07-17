@@ -10,10 +10,24 @@ export default async function Dashboard() {
       where: { stockQuantity: { lt: 10 } },
       take: 5,
     }),
-    prisma.bill.findMany()
+    prisma.bill.findMany({
+      include: {
+        items: true
+      }
+    })
   ]);
 
   const totalSales = bills.reduce((sum, bill) => sum + bill.totalAmount, 0);
+  
+  // Calculate total net profit
+  let totalNetProfit = 0;
+  for (const bill of bills) {
+    for (const item of bill.items) {
+      // Net Profit = (Selling Price - Cost Price) * Quantity
+      const profitPerItem = item.price - (item.costPrice || 0);
+      totalNetProfit += profitPerItem * item.quantity;
+    }
+  }
 
   return (
     <div>
@@ -28,6 +42,11 @@ export default async function Dashboard() {
         <div className="card" style={{ borderLeft: '4px solid var(--success)' }}>
           <h3 style={{ fontSize: '1rem', color: 'var(--foreground)', opacity: 0.8 }}>Total Sales</h3>
           <p style={{ fontSize: '2rem', fontWeight: 700, marginTop: '0.5rem' }}>${totalSales.toFixed(2)}</p>
+        </div>
+
+        <div className="card" style={{ borderLeft: '4px solid #8b5cf6' }}>
+          <h3 style={{ fontSize: '1rem', color: 'var(--foreground)', opacity: 0.8 }}>Net Profit</h3>
+          <p style={{ fontSize: '2rem', fontWeight: 700, marginTop: '0.5rem' }}>${totalNetProfit.toFixed(2)}</p>
         </div>
         
         <div className="card" style={{ borderLeft: '4px solid var(--danger)' }}>

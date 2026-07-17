@@ -8,6 +8,7 @@ type Medicine = {
   batchNumber: string;
   expiryDate: string;
   price: number;
+  costPrice: number;
   stockQuantity: number;
 };
 
@@ -21,6 +22,7 @@ export default function InventoryPage() {
     batchNumber: '',
     expiryDate: '',
     price: '',
+    costPrice: '',
     stockQuantity: ''
   });
 
@@ -56,7 +58,7 @@ export default function InventoryPage() {
       });
       
       if (res.ok) {
-        setFormData({ name: '', batchNumber: '', expiryDate: '', price: '', stockQuantity: '' });
+        setFormData({ name: '', batchNumber: '', expiryDate: '', price: '', costPrice: '', stockQuantity: '' });
         setShowForm(false);
         fetchMedicines();
       } else {
@@ -111,8 +113,12 @@ export default function InventoryPage() {
                 <input className="input-field" type="date" name="expiryDate" value={formData.expiryDate} onChange={handleInputChange} required />
               </div>
               <div className="input-group">
-                <label>Price</label>
+                <label>Selling Price</label>
                 <input className="input-field" type="number" step="0.01" name="price" value={formData.price} onChange={handleInputChange} required />
+              </div>
+              <div className="input-group">
+                <label>Cost Price</label>
+                <input className="input-field" type="number" step="0.01" name="costPrice" value={formData.costPrice} onChange={handleInputChange} required />
               </div>
               <div className="input-group">
                 <label>Stock Quantity</label>
@@ -139,7 +145,8 @@ export default function InventoryPage() {
                 <th>Name</th>
                 <th>Batch No.</th>
                 <th>Expiry Date</th>
-                <th>Price</th>
+                <th>Cost Price</th>
+                <th>Selling Price</th>
                 <th>Stock</th>
                 <th>Actions</th>
               </tr>
@@ -151,6 +158,7 @@ export default function InventoryPage() {
                   <td style={{ fontWeight: 500 }}>{med.name}</td>
                   <td>{med.batchNumber}</td>
                   <td>{new Date(med.expiryDate).toLocaleDateString()}</td>
+                  <td>${med.costPrice.toFixed(2)}</td>
                   <td>${med.price.toFixed(2)}</td>
                   <td>
                     <span style={{ 

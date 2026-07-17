@@ -27,7 +27,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, batchNumber, expiryDate, price, stockQuantity } = body;
+    const { name, batchNumber, expiryDate, price, costPrice, stockQuantity } = body;
 
     const newMedicine = await prisma.medicine.create({
       data: {
@@ -35,6 +35,7 @@ export async function POST(request: Request) {
         batchNumber,
         expiryDate: new Date(expiryDate),
         price: parseFloat(price),
+        costPrice: parseFloat(costPrice) || 0,
         stockQuantity: parseInt(stockQuantity, 10),
       },
     });
