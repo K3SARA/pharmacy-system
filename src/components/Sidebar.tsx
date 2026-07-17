@@ -6,6 +6,11 @@ import { usePathname } from 'next/navigation';
 export default function Sidebar() {
   const pathname = usePathname();
 
+  // Do not render sidebar on print pages
+  if (pathname.startsWith('/print')) {
+    return null;
+  }
+
   const navItems = [
     { name: 'Dashboard', path: '/' },
     { name: 'Billing (POS)', path: '/billing' },

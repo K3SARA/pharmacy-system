@@ -69,6 +69,15 @@ export default function PrintBillPage() {
           font-family: 'Courier New', Courier, monospace;
           font-size: 12px;
         }
+        /* Override global layout styles for the print popup window */
+        main.main-content {
+          padding: 0 !important;
+          margin: 0 !important;
+          background: #fff !important;
+        }
+        .app-container {
+          background: #fff !important;
+        }
         .print-container {
           width: 72mm; /* Leave small margin for 80mm paper */
           margin: 0 auto;
