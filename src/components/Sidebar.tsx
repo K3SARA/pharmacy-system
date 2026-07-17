@@ -62,7 +62,7 @@ export default function Sidebar() {
         </button>
       </div>
 
-      <nav className={isMobile && isOpen ? 'open' : ''} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <nav className={`sidebar-nav ${isMobile && isOpen ? 'open' : ''}`}>
         {navItems.map((item) => {
           const isActive = pathname === item.path;
           return (
