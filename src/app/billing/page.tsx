@@ -100,8 +100,8 @@ export default function BillingPage() {
         setSearch('');
         setLastBillId(data.id);
         
-        // Auto-open print tab
-        window.open(`/print/${data.id}`, '_blank');
+        // Auto-open print page in the same tab
+        window.location.href = `/print/${data.id}`;
 
         // Trigger a re-fetch of medicines to get updated stock
         const freshRes = await fetch('/api/inventory');
@@ -183,7 +183,7 @@ export default function BillingPage() {
                 <button 
                   className="btn btn-primary" 
                   style={{ backgroundColor: 'var(--success)' }}
-                  onClick={() => window.open(`/print/${lastBillId}`, '_blank')}
+                  onClick={() => window.location.href = `/print/${lastBillId}`}
                 >
                   🖨️ Print Last Bill
                 </button>
