@@ -1,9 +1,25 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const from = searchParams.get('from');
+    const to = searchParams.get('to');
+
+    let dateFilter: any = undefined;
+    if (from || to) {
+      dateFilter = {};
+      if (from) dateFilter.gte = new Date(from);
+      if (to) {
+        const toDate = new Date(to);
+        toDate.setHours(23, 59, 59, 999);
+        dateFilter.lte = toDate;
+      }
+    }
+
     const bills = await prisma.bill.findMany({
+      where: dateFilter ? { date: dateFilter } : undefined,
       include: {
         items: {
           include: {

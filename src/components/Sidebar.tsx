@@ -14,6 +14,7 @@ export default function Sidebar() {
   const navItems = [
     { name: 'Dashboard', path: '/' },
     { name: 'Billing (POS)', path: '/billing' },
+    { name: 'Billing History', path: '/history' },
     { name: 'Inventory', path: '/inventory' },
     { name: 'Settings', path: '/settings' },
   ];
