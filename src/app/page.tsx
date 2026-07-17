@@ -1,6 +1,8 @@
 import prisma from '@/lib/prisma';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Dashboard() {
   const [totalMedicines, lowStockMedicines, bills] = await Promise.all([
     prisma.medicine.count(),
