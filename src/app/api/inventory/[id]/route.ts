@@ -8,7 +8,7 @@ export async function PUT(
   try {
     const { id } = await params;
     const body = await request.json();
-    const { name, batchNumber, expiryDate, price, stockQuantity } = body;
+    const { name, batchNumber, expiryDate, price, costPrice, stockQuantity } = body;
 
     const updatedMedicine = await prisma.medicine.update({
       where: {
@@ -19,6 +19,7 @@ export async function PUT(
         batchNumber,
         expiryDate: expiryDate ? new Date(expiryDate) : undefined,
         price: price ? parseFloat(price) : undefined,
+        costPrice: costPrice !== undefined ? parseFloat(costPrice) : undefined,
         stockQuantity: stockQuantity !== undefined ? parseInt(stockQuantity, 10) : undefined,
       },
     });

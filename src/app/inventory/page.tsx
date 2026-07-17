@@ -16,6 +16,7 @@ export default function InventoryPage() {
   const [medicines, setMedicines] = useState<Medicine[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<number | null>(null);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -49,8 +50,11 @@ export default function InventoryPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/inventory', {
-        method: 'POST',
+      const url = editingId ? `/api/inventory/${editingId}` : '/api/inventory';
+      const method = editingId ? 'PUT' : 'POST';
+      
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json'
         },
@@ -60,13 +64,29 @@ export default function InventoryPage() {
       if (res.ok) {
         setFormData({ name: '', batchNumber: '', expiryDate: '', price: '', costPrice: '', stockQuantity: '' });
         setShowForm(false);
+        setEditingId(null);
         fetchMedicines();
       } else {
-        alert('Failed to add medicine');
+        alert(`Failed to ${editingId ? 'update' : 'add'} medicine`);
       }
     } catch (error) {
-      console.error('Error adding medicine:', error);
+      console.error(`Error ${editingId ? 'updating' : 'adding'} medicine:`, error);
     }
+  };
+
+  const handleEdit = (med: Medicine) => {
+    setFormData({
+      name: med.name,
+      batchNumber: med.batchNumber,
+      // Format date for <input type="date"> (YYYY-MM-DD)
+      expiryDate: new Date(med.expiryDate).toISOString().split('T')[0],
+      price: med.price.toString(),
+      costPrice: (med.costPrice || 0).toString(),
+      stockQuantity: med.stockQuantity.toString()
+    });
+    setEditingId(med.id);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDelete = async (id: number) => {
@@ -90,14 +110,22 @@ export default function InventoryPage() {
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1 className="page-title" style={{ marginBottom: 0 }}>Inventory Management</h1>
-        <button className="btn btn-primary" onClick={() => setShowForm(!showForm)}>
+        <button className="btn btn-primary" onClick={() => {
+          if (showForm) {
+            setShowForm(false);
+            setEditingId(null);
+            setFormData({ name: '', batchNumber: '', expiryDate: '', price: '', costPrice: '', stockQuantity: '' });
+          } else {
+            setShowForm(true);
+          }
+        }}>
           {showForm ? 'Cancel' : '+ Add Medicine'}
         </button>
       </div>
 
       {showForm && (
         <div className="card" style={{ marginBottom: '2rem' }}>
-          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>Add New Medicine</h2>
+          <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem' }}>{editingId ? 'Edit Medicine' : 'Add New Medicine'}</h2>
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
               <div className="input-group">
@@ -126,7 +154,7 @@ export default function InventoryPage() {
               </div>
             </div>
             <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'flex-end' }}>
-              <button type="submit" className="btn btn-primary">Save Medicine</button>
+              <button type="submit" className="btn btn-primary">{editingId ? 'Update Medicine' : 'Save Medicine'}</button>
             </div>
           </form>
         </div>
@@ -169,13 +197,22 @@ export default function InventoryPage() {
                     </span>
                   </td>
                   <td>
-                    <button 
-                      className="btn btn-danger" 
-                      style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
-                      onClick={() => handleDelete(med.id)}
-                    >
-                      Delete
-                    </button>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button 
+                        className="btn btn-primary" 
+                        style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', backgroundColor: '#8b5cf6' }}
+                        onClick={() => handleEdit(med)}
+                      >
+                        Edit
+                      </button>
+                      <button 
+                        className="btn btn-danger" 
+                        style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                        onClick={() => handleDelete(med.id)}
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
