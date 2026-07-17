@@ -166,58 +166,60 @@ export default function InventoryPage() {
         ) : medicines.length === 0 ? (
           <p>No medicines found in inventory.</p>
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Batch No.</th>
-                <th>Expiry Date</th>
-                <th>Cost Price</th>
-                <th>Selling Price</th>
-                <th>Stock</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {medicines.map((med) => (
-                <tr key={med.id}>
-                  <td>{med.id}</td>
-                  <td style={{ fontWeight: 500 }}>{med.name}</td>
-                  <td>{med.batchNumber}</td>
-                  <td>{new Date(med.expiryDate).toLocaleDateString()}</td>
-                  <td>${(med.costPrice || 0).toFixed(2)}</td>
-                  <td>${med.price.toFixed(2)}</td>
-                  <td>
-                    <span style={{ 
-                      color: med.stockQuantity < 10 ? 'var(--danger)' : 'inherit',
-                      fontWeight: med.stockQuantity < 10 ? 600 : 400 
-                    }}>
-                      {med.stockQuantity}
-                    </span>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button 
-                        className="btn btn-primary" 
-                        style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', backgroundColor: '#8b5cf6' }}
-                        onClick={() => handleEdit(med)}
-                      >
-                        Edit
-                      </button>
-                      <button 
-                        className="btn btn-danger" 
-                        style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
-                        onClick={() => handleDelete(med.id)}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
+          <div className="table-responsive">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Batch No.</th>
+                  <th>Expiry Date</th>
+                  <th>Cost Price</th>
+                  <th>Selling Price</th>
+                  <th>Stock</th>
+                  <th>Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {medicines.map((med) => (
+                  <tr key={med.id}>
+                    <td>{med.id}</td>
+                    <td style={{ fontWeight: 500 }}>{med.name}</td>
+                    <td>{med.batchNumber}</td>
+                    <td>{new Date(med.expiryDate).toLocaleDateString()}</td>
+                    <td>${(med.costPrice || 0).toFixed(2)}</td>
+                    <td>${med.price.toFixed(2)}</td>
+                    <td>
+                      <span style={{ 
+                        color: med.stockQuantity < 10 ? 'var(--danger)' : 'inherit',
+                        fontWeight: med.stockQuantity < 10 ? 600 : 400 
+                      }}>
+                        {med.stockQuantity}
+                      </span>
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button 
+                          className="btn btn-primary" 
+                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem', backgroundColor: '#8b5cf6' }}
+                          onClick={() => handleEdit(med)}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          className="btn btn-danger" 
+                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
+                          onClick={() => handleDelete(med.id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>

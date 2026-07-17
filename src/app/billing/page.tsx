@@ -116,7 +116,7 @@ export default function BillingPage() {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
+    <div className="mobile-stack" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '2rem' }}>
       
       {/* Left Column: Product Search */}
       <div>
@@ -132,35 +132,37 @@ export default function BillingPage() {
         </div>
 
         <div className="card" style={{ padding: '0' }}>
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {medicines.map((med) => (
-                <tr key={med.id}>
-                  <td style={{ fontWeight: 500 }}>{med.name}</td>
-                  <td>${med.price.toFixed(2)}</td>
-                  <td>{med.stockQuantity}</td>
-                  <td>
-                    <button 
-                      className="btn btn-primary" 
-                      style={{ padding: '0.4rem 0.8rem', fontSize: '0.875rem' }}
-                      onClick={() => addToCart(med)}
-                      disabled={med.stockQuantity === 0}
-                    >
-                      {med.stockQuantity === 0 ? 'Out of Stock' : 'Add'}
-                    </button>
-                  </td>
+          <div className="table-responsive">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {medicines.map((med) => (
+                  <tr key={med.id}>
+                    <td style={{ fontWeight: 500 }}>{med.name}</td>
+                    <td>${med.price.toFixed(2)}</td>
+                    <td>{med.stockQuantity}</td>
+                    <td>
+                      <button 
+                        className="btn btn-primary" 
+                        style={{ padding: '0.4rem 0.8rem', fontSize: '0.875rem' }}
+                        onClick={() => addToCart(med)}
+                        disabled={med.stockQuantity === 0}
+                      >
+                        {med.stockQuantity === 0 ? 'Out of Stock' : 'Add'}
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
           {medicines.length === 0 && (
             <div style={{ padding: '2rem', textAlign: 'center', color: 'var(--foreground)', opacity: 0.7 }}>
               No medicines found.

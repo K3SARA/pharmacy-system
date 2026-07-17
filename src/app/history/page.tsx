@@ -92,43 +92,45 @@ export default function HistoryPage() {
         ) : bills.length === 0 ? (
           <p>No bills found for this date range.</p>
         ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Bill ID</th>
-                <th>Date & Time</th>
-                <th>Items Sold</th>
-                <th>Total Amount</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {bills.map((bill) => (
-                <tr key={bill.id}>
-                  <td style={{ fontWeight: 600 }}>#{bill.id}</td>
-                  <td>{new Date(bill.date).toLocaleString()}</td>
-                  <td>
-                    {bill.items.length} items 
-                    <span style={{ fontSize: '0.8rem', opacity: 0.7, marginLeft: '0.5rem' }}>
-                      ({bill.items.reduce((sum, item) => sum + item.quantity, 0)} qty)
-                    </span>
-                  </td>
-                  <td style={{ fontWeight: 600, color: 'var(--primary)' }}>
-                    ${bill.totalAmount.toFixed(2)}
-                  </td>
-                  <td>
-                    <button 
-                      className="btn btn-primary" 
-                      style={{ padding: '0.4rem 0.8rem', fontSize: '0.875rem' }}
-                      onClick={() => window.open(`/print/${bill.id}`, 'PrintBill', 'width=400,height=600,left=100,top=100')}
-                    >
-                      📄 View Receipt
-                    </button>
-                  </td>
+          <div className="table-responsive">
+            <table className="data-table">
+              <thead>
+                <tr>
+                  <th>Bill ID</th>
+                  <th>Date & Time</th>
+                  <th>Items Sold</th>
+                  <th>Total Amount</th>
+                  <th>Action</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {bills.map((bill) => (
+                  <tr key={bill.id}>
+                    <td style={{ fontWeight: 600 }}>#{bill.id}</td>
+                    <td>{new Date(bill.date).toLocaleString()}</td>
+                    <td>
+                      {bill.items.length} items 
+                      <span style={{ fontSize: '0.8rem', opacity: 0.7, marginLeft: '0.5rem' }}>
+                        ({bill.items.reduce((sum, item) => sum + item.quantity, 0)} qty)
+                      </span>
+                    </td>
+                    <td style={{ fontWeight: 600, color: 'var(--primary)' }}>
+                      ${bill.totalAmount.toFixed(2)}
+                    </td>
+                    <td>
+                      <button 
+                        className="btn btn-primary" 
+                        style={{ padding: '0.4rem 0.8rem', fontSize: '0.875rem' }}
+                        onClick={() => window.open(`/print/${bill.id}`, 'PrintBill', 'width=400,height=600,left=100,top=100')}
+                      >
+                        📄 View Receipt
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
