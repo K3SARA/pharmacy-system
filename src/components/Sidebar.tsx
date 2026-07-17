@@ -70,7 +70,13 @@ export default function Sidebar() {
               key={item.path} 
               href={item.path}
               className={`nav-link ${isActive ? 'active' : ''}`}
-              onClick={() => { if (isMobile) setIsOpen(false); }}
+              onClick={() => { 
+                if (isMobile) {
+                  setIsOpen(false);
+                } else {
+                  setIsCollapsed(true);
+                }
+              }}
               title={isCollapsed && !isMobile ? item.name : undefined}
             >
               <span style={{ fontSize: '1.25rem', width: '24px', textAlign: 'center' }}>{item.icon}</span>
