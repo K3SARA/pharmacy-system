@@ -158,7 +158,7 @@ export default function InventoryPage() {
                   <td style={{ fontWeight: 500 }}>{med.name}</td>
                   <td>{med.batchNumber}</td>
                   <td>{new Date(med.expiryDate).toLocaleDateString()}</td>
-                  <td>${med.costPrice.toFixed(2)}</td>
+                  <td>${(med.costPrice || 0).toFixed(2)}</td>
                   <td>${med.price.toFixed(2)}</td>
                   <td>
                     <span style={{ 
